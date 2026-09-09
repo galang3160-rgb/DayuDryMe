@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kotoba App — Belajar Kosakata Jepang</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Dekorasi background -->
+  <div class="bg-decor" aria-hidden="true">
+    <span class="glow glow-a"></span>
+    <span class="glow glow-b"></span>
+  </div>
+
+  <div class="app-shell">
+
+    <!-- ===== SIDEBAR (desktop) ===== -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">🇯🇵</span>
+        <span class="brand-name">Kotoba App</span>
+      </div>
+
+      <nav class="nav-list" aria-label="Navigasi Utama">
+        <button class="nav-item active" data-view="home">
+          <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+        </button>
+        <button class="nav-item" data-view="search">
+          <span class="nav-icon">🔎</span><span class="nav-label">Cari Kotoba</span>
+        </button>
+        <button class="nav-item" data-view="kotoba">
+          <span class="nav-icon">📚</span><span class="nav-label">Kotoba</span>
+        </button>
+        <button class="nav-item" data-view="hafalan">
+          <span class="nav-icon">🧠</span><span class="nav-label">Hafalan</span>
+        </button>
+        <button class="nav-item" data-view="quiz">
+          <span class="nav-icon">✏️</span><span class="nav-label">Latihan Soal</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-foot">
+        <p class="sidebar-foot-label">Total kotoba</p>
+        <p class="sidebar-foot-value" id="sidebarTotal">40</p>
+      </div>
+    </aside>
+
+    <!-- ===== MAIN AREA ===== -->
+    <div class="main-area">
+      <header class="top-header">
+        <h1 id="pageTitle">Home</h1>
+        <p class="page-sub" id="pageSub">Selamat datang kembali!</p>
+      </header>
+
+      <main class="content" id="content">
+
+        <!-- ========== HOME ========== -->
+        <section class="view" id="view-home" data-view="home">
+          <div class="hero-card">
+            <p class="hero-eyebrow">こんにちは</p>
+            <h2>Selamat datang di Kotoba App</h2>
+            <p class="hero-desc">Perluas kosakata bahasa Jepangmu lewat pencarian, flashcard, dan latihan soal interaktif.</p>
+          </div>
+
+          <div class="stats-row">
+            <div class="stat-card">
+              <p class="stat-value" id="statTotal">40</p>
+              <p class="stat-label">Total Kotoba</p>
+            </div>
+            <div class="stat-card">
+              <p class="stat-value" id="statSaved">0</p>
+              <p class="stat-label">Hafalan Tersimpan</p>
+            </div>
+            <div class="stat-card word-of-day">
+              <p class="stat-label">Kotoba Hari Ini</p>
+              <p class="stat-word-kanji" id="wordOfDayKanji">学生</p>
+              <p class="stat-word-detail" id="wordOfDayDetail">がくせい ・ Siswa</p>
+            </div>
+          </div>
+
+          <div class="menu-grid">
+            <button class="menu-card" data-goto="search">
+              <span class="menu-icon">🔎</span>
+              <span class="menu-title">Cari Kotoba</span>
+              <span class="menu-desc">Temukan kata dengan cepat</span>
+            </button>
+            <button class="menu-card" data-goto="kotoba">
+              <span class="menu-icon">📚</span>
+              <span class="menu-title">Kotoba</span>
+              <span class="menu-desc">Jelajahi semua kosakata</span>
+            </button>
+            <button class="menu-card" data-goto="hafalan">
+              <span class="menu-icon">🧠</span>
+              <span class="menu-title">Hafalan Sementara</span>
+              <span class="menu-desc">Kelola kata yang sedang dihafal</span>
+            </button>
+            <button class="menu-card" data-goto="quiz">
+              <span class="menu-icon">✏️</span>
+              <span class="menu-title">Latihan Soal</span>
+              <span class="menu-desc">Uji kemampuanmu</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- ========== CARI KOTOBA ========== -->
+        <section class="view" id="view-search" data-view="search" hidden>
+          <div class="search-bar-wrap">
+            <input type="text" id="searchInput" class="search-input"
+                   placeholder="🔍 Cari kotoba: hiragana, kanji, romaji, atau arti..." autocomplete="off">
+          </div>
+          <p class="hint-state" id="searchHint">Mulai ketik untuk mencari kotoba.</p>
+          <p class="empty-state" id="searchEmpty" hidden>Kotoba tidak ditemukan. Coba kata kunci lain.</p>
+          <div class="results-grid" id="searchResults"></div>
+        </section>
+
+        <!-- ========== KOTOBA ========== -->
+        <section class="view" id="view-kotoba" data-view="kotoba" hidden>
+          <div class="kotoba-toolbar">
+            <div class="chip-group" id="categoryChips"></div>
+            <button class="btn btn-ghost-accent" id="startAllFlashcard">🧠 Hafalkan Semua</button>
+          </div>
+          <div class="results-grid" id="kotobaGrid"></div>
+        </section>
+
+        <!-- ========== HAFALAN SEMENTARA ========== -->
+        <section class="view" id="view-hafalan" data-view="hafalan" hidden>
+          <div class="hafalan-head">
+            <div>
+              <p class="hafalan-count-label">Jumlah hafalan</p>
+              <p class="hafalan-count" id="hafalanCount">0 Kotoba</p>
+            </div>
+            <button class="btn btn-primary" id="startHafalanFlashcard" disabled>🧠 Mulai Menghafal</button>
+          </div>
+          <p class="empty-state" id="hafalanEmpty">Belum ada kotoba yang disimpan.</p>
+          <div class="results-grid" id="hafalanList"></div>
+        </section>
+
+        <!-- ========== LATIHAN SOAL ========== -->
+        <section class="view" id="view-quiz" data-view="quiz" hidden>
+
+          <div class="quiz-panel" id="quizIntro">
+            <h2 class="quiz-intro-title">✏️ Latihan Soal</h2>
+            <p class="quiz-intro-desc">Uji kemampuanmu dengan mengetik cara baca atau arti dari kotoba yang muncul.</p>
+            <p class="quiz-intro-label">Jumlah soal</p>
+            <div class="chip-group" id="quizCountOptions">
+              <button class="chip active" data-count="10">10 Soal</button>
+              <button class="chip" data-count="20">20 Soal</button>
+              <button class="chip" data-count="all">Semua (40)</button>
+            </div>
+            <button class="btn btn-primary btn-lg" id="startQuizBtn">Mulai Latihan</button>
+          </div>
+
+          <div class="quiz-panel" id="quizQuestion" hidden>
+            <p class="quiz-progress" id="quizProgress">Soal 1 dari 10</p>
+
+            <div class="quiz-card">
+              <span class="face-tag" id="quizPromptTag">Cara Baca</span>
+              <p class="quiz-kanji" id="quizKanji">学生</p>
+              <p class="quiz-instruction" id="quizInstruction">Tulis cara baca (hiragana) dari kata di atas.</p>
+
+              <input type="text" class="quiz-input" id="quizInput" placeholder="Ketik jawabanmu di sini..." autocomplete="off">
+
+              <div class="quiz-feedback" id="quizFeedback" hidden></div>
+
+              <div class="quiz-actions">
+                <button class="btn btn-primary" id="checkAnswerBtn">Cek Jawaban</button>
+                <button class="btn btn-primary" id="nextQuestionBtn" hidden>Lanjut ›</button>
+              </div>
+            </div>
+
+            <p class="quiz-score">Skor sementara: <strong id="quizScoreLive">0</strong> / <span id="quizTotalLive">10</span></p>
+          </div>
+
+          <div class="quiz-panel" id="quizResult" hidden>
+            <h2 class="quiz-result-title">🎉 Latihan Selesai!</h2>
+            <p class="quiz-final-score" id="quizFinalScore">Skor kamu: 8 / 10</p>
+            <p class="quiz-final-msg" id="quizFinalMsg">Kerja bagus!</p>
+            <div class="quiz-actions">
+              <button class="btn btn-primary" id="retryQuizBtn">Ulangi</button>
+              <button class="btn btn-ghost" id="quizHomeBtn">Kembali ke Home</button>
+            </div>
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ===== BOTTOM NAV (mobile) ===== -->
+  <nav class="bottom-nav" aria-label="Navigasi Seluler">
+    <button class="nav-item active" data-view="home">
+      <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item" data-view="search">
+      <span class="nav-icon">🔎</span><span class="nav-label">Cari</span>
+    </button>
+    <button class="nav-item" data-view="kotoba">
+      <span class="nav-icon">📚</span><span class="nav-label">Kotoba</span>
+    </button>
+    <button class="nav-item" data-view="hafalan">
+      <span class="nav-icon">🧠</span><span class="nav-label">Hafalan</span>
+    </button>
+    <button class="nav-item" data-view="quiz">
+      <span class="nav-icon">✏️</span><span class="nav-label">Latihan</span>
+    </button>
+  </nav>
+
+  <!-- ===== FLASHCARD OVERLAY ===== -->
+  <div class="flashcard-overlay" id="flashcardOverlay" hidden>
+    <div class="flashcard-modal">
+      <button class="overlay-close" id="closeFlashcard" aria-label="Tutup flashcard">✕</button>
+      <p class="overlay-progress" id="fcProgress">1 / 10</p>
+
+      <div class="fc-card" id="fcCard" tabindex="0" role="button" aria-label="Ketuk untuk membalik kartu">
+        <div class="fc-card-inner" id="fcCardInner">
+          <div class="fc-face fc-front">
+            <span class="face-tag">Kosakata</span>
+            <p class="fc-kanji" id="fcKanji">学生</p>
+            <button class="btn btn-flip" id="fcToggleBtn">Tampilkan</button>
+          </div>
+          <div class="fc-face fc-back">
+            <span class="face-tag">Cara Baca &amp; Arti</span>
+            <p class="fc-kana" id="fcKana">がくせい</p>
+            <p class="fc-romaji" id="fcRomaji">gakusei</p>
+            <p class="fc-meaning" id="fcMeaning">Siswa</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="fc-controls">
+        <button class="btn btn-ghost" id="fcPrev">‹ Sebelumnya</button>
+        <button class="btn btn-ghost" id="fcNext">Berikutnya ›</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
